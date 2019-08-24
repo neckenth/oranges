@@ -2,10 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
+const utils = require('./utils');
 
 const app = express();
 
-const URL = 'https://api-v3.mbta.com/vehicles';
+const URL = 'https://api-v3.mbta.com/vehicles/?filter%5Broute%5D=Orange';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,8 +22,10 @@ app.get('/orange', async (req, res, next) => {
     headers: { Authorization: `bearer ${process.env.API_KEY}` },
   };
   try {
-    const vehicles = await axios.get(URL, config);
-    res.send(vehicles.data);
+    const response = await axios.get(URL, config);
+    const vehiclesArr = response.data.data;
+    const newVehicles = vehiclesArr.filter((v) => utils.vehicleIsNew(Number(v.attributes.label)));
+    res.json(newVehicles);
   } catch (error) {
     next(error);
   }
