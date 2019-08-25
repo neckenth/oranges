@@ -1,15 +1,27 @@
-const resolve = require('path');
+require("babel-register")
 
 module.exports = {
-  entry: './main.js',
+  entry: './src/main.js',
   output: {
     path: __dirname,
-    filename: './public/bundle.js',
+    publicPath: '/',
+    filename: 'bundle.js',
+  },
+  module: {
+    rules: [
+      {
+        test: /.jsx?$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }
+    ]
   },
   mode: 'development',
   context: __dirname,
   devtool: 'source-map',
+  watch: true,
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.jsx'],
   },
+  plugins: []
 };

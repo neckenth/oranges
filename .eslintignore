@@ -1,0 +1,8 @@
+node_modules
+*.json
+bundle.js* 
+*.ico
+*.babelrc
+*.env
+*.md
+*.config.js
