@@ -6,15 +6,20 @@ const volleyball = require('volleyball');
 const utils = require('./utils');
 
 const app = express();
-app.use(volleyball);
 
 const URL = 'https://api-v3.mbta.com/vehicles/?filter%5Broute%5D=Orange';
 
+// logging middleware
+app.use(volleyball);
+
+// body parsing middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// static middleware
 app.use(express.static(path.join(__dirname, '../public')));
 
+// routes
 app.get('/', (req, res) => {
   res.send('Building the orange line app');
 });
@@ -24,9 +29,9 @@ app.get('/api/orange', async (req, res, next) => {
     headers: { Authorization: `bearer ${process.env.API_KEY}` },
   };
   try {
-    const response = await axios.get(URL, config);
-    const vehiclesArr = response.data.data;
-    const newVehicles = vehiclesArr.filter((v) => !utils.vehicleIsNew(Number(v.attributes.label)));
+    const { response, data } = await axios.get(URL, config);
+    const vehiclesArr = data.data;
+    const newVehicles = vehiclesArr.filter((v) => utils.vehicleIsNew(Number(v.attributes.label)));
     res.json(newVehicles);
   } catch (error) {
     next(error);
@@ -37,6 +42,7 @@ app.get('/api/orange', async (req, res, next) => {
 //   res.sendFile(path.join(__dirname, '../public/index.html'));
 // });
 
+// error-handling middleware
 app.use((err, req, res, next) => {
   console.log(err.stack);
   res.status(err.status || 500).send(err.message || 'Internal server error');
