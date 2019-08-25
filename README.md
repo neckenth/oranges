@@ -4,9 +4,7 @@ Node app to consume MBTA API and show active _new_ orange line trains
 ## requirements
 * built with Node version 10.16.3
     * if you already have [Node Version Manager](https://github.com/nvm-sh/nvm) installed, run `nvm use` prior to beginning development
-    * otherwise install nvm, then run:
-        * `nvm install 10.16.3`
-        * `nvm use 10.16.3`
+    * otherwise install nvm, then run: `nvm i`
 
 ## runtime instructions
 

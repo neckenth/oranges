@@ -1,10 +1,11 @@
-require("babel-register")
+require("@babel/register")
+const path = require('path')
 
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: __dirname,
-    publicPath: '/',
+    path: path.join(__dirname, '/public/dist'),
+    publicPath: '/public/dist',
     filename: 'bundle.js',
   },
   module: {

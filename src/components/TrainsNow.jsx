@@ -11,7 +11,9 @@ class TrainsNow extends React.Component {
     }
 
     render() {
-        <h1>These are the active new orange line trains now</h1>
+       return (
+       <h1>These are the active new orange line trains now</h1>
+       )
     }
 }
 
