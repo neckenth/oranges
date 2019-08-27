@@ -7,7 +7,7 @@ const utils = require('./utils');
 
 const app = express();
 
-const URL = 'https://api-v3.mbta.com/vehicles/?filter%5Broute%5D=Orange';
+const URL = 'https://api-v3.mbta.com/vehicles/?include=stop&filter%5Broute%5D=Orange';
 
 // logging middleware
 app.use(volleyball);
@@ -29,10 +29,11 @@ app.get('/api/orange', async (req, res, next) => {
     headers: { Authorization: `bearer ${process.env.API_KEY}` },
   };
   try {
-    const { response, data } = await axios.get(URL, config);
-    const vehiclesArr = data.data;
-    const newVehicles = vehiclesArr.filter((v) => utils.vehicleIsNew(Number(v.attributes.label)));
-    res.json(newVehicles);
+    const { data } = await axios.get(URL, config);
+    const {data: vehiclesArr, included: stopData} = data;
+    const newVehiclesArr = vehiclesArr.filter((v) => !utils.vehicleIsNew(Number(v.attributes.label)));
+    const newVehiclesData = newVehiclesArr.map(v => utils.narrowData(v, stopData))
+    res.json(newVehiclesData);
   } catch (error) {
     next(error);
   }
