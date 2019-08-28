@@ -1,6 +1,7 @@
 import React from 'react'
 import Konva from 'konva'
-import { Stage, Layer, Text, Line, Circle } from 'react-konva'
+import { Stage, Layer, Text, Line, Circle, Group, Label, Tag } from 'react-konva'
+import { northStops, southStops, computeNorthStopCoords, computeSouthStopCoords, collectStops, collectPoints } from '../utils'
 
 class TrainsNow extends React.Component {
 
@@ -11,6 +12,9 @@ class TrainsNow extends React.Component {
 
     componentDidMount() {
         console.log('MOUNTED!')
+        console.log('NORTH', computeNorthStopCoords(northStops, 500, 60, 40))
+        console.log('SOUTH', computeSouthStopCoords(southStops, 500, 60, 40, 28))
+
     }
 
     stopsToPoints(stopsList) {
@@ -18,69 +22,31 @@ class TrainsNow extends React.Component {
     }
 
     render() {
-        const vertStops = [
-            {
-                "name": "Oak Grove",
-                "x": 300,
-                "y": 60
-            },
-            {
-                "name": "Malden Center",
-                "x": 300,
-                "y": 100
-            },
-            {
-                "name": "Wellington",
-                "x": 300,
-                "y": 140
-            },
-            {
-                "name": "Assembly",
-                "x": 300,
-                "y": 180
-            },
-            {
-                "name": "Sullivan Square",
-                "x": 300,
-                "y": 220
-            },
-            {
-                "name": "Community College",
-                "x": 300,
-                "y": 260
-            },
-            {
-                "name": "North Station",
-                "x": 300,
-                "y": 300
-            },
-            {
-                "name": "Haymarket",
-                "x": 300,
-                "y": 340
-            },
-            {
-                "name": "State",
-                "x": 300,
-                "y": 380
-            },
-        ]
-
+        const stops = collectStops()
+        const points = collectPoints(stops)
 
        return (
-           <Stage width={window.innerWidth} height={window.innerHeight}>
+           <Stage width={window.outerWidth} height={window.outerHeight}>
                <Layer>
                    <Text text="Here are the active new orange line trains now" />
                     <Line
-                        points={this.stopsToPoints(vertStops)}
+                        points={points}
                         stroke='orange'
                         strokeWidth={30}
                         lineCap='round'
                         lineJoin='round'
-                        tension={1}
+                        tension={0}
                     />
-                    {vertStops.map(stop => {
-                        return <Circle key={stop.name} x={stop.x} y={stop.y} fill='white' radius={8} stroke='black' />
+                    {stops.map(stop => {
+                        return (
+                        <Group key={stop.name}>
+                            <Label x={stop.x + 20} y={stop.y - 3}>
+                                <Tag />
+                                <Text text={stop.name} />
+                            </Label>
+                            <Circle name={stop.name} x={stop.x} y={stop.y} fill='white' radius={8} stroke='black' />
+                        </Group>
+                        )
                     })}
                </Layer>
            </Stage>
