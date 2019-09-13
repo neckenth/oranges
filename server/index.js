@@ -31,7 +31,9 @@ app.get('/api/orange', async (req, res, next) => {
   try {
     const { data } = await axios.get(URL, config);
     const { data: vehiclesArr, included: stopData } = data;
-    const newVehiclesArr = vehiclesArr.filter((v) => !utils.vehicleIsNew(Number(v.attributes.label)));
+    const newVehiclesArr = vehiclesArr.filter(
+      (v) => !utils.vehicleIsNew(Number(v.attributes.label)),
+    );
     const newVehiclesData = newVehiclesArr.map((v) => utils.narrowData(v, stopData));
     res.json(newVehiclesData);
   } catch (error) {

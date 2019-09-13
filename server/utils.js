@@ -17,7 +17,9 @@ function vehicleIsNew(vehicleNum) {
  * @returns {object}
  */
 function narrowData(vehicle, stopData) {
-  const stopName = stopData.find((stop) => stop.id === vehicle.relationships.stop.data.id).attributes.name;
+  const stopName = stopData.find(
+    (stop) => stop.id === vehicle.relationships.stop.data.id,
+  ).attributes.name;
 
   return {
     vehicleNum: vehicle.attributes.label,

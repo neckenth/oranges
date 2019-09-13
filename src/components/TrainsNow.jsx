@@ -1,57 +1,58 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 import Konva from 'konva'
 import { Stage, Layer, Text, Line, Circle, Group, Label, Tag } from 'react-konva'
-import { northStops, southStops, computeNorthStopCoords, computeSouthStopCoords, collectStops, collectPoints } from '../utils'
+import { collectStops, collectPoints } from '../utils'
 
-class TrainsNow extends React.Component {
+function TrainsNow() {
 
-    constructor() {
-        super()
-        this.stopsToPoints = this.stopsToPoints.bind(this)
-    }
+    const [data, setData] = useState({isFetching: false, trains: []})
 
-    componentDidMount() {
-        console.log('MOUNTED!')
-        console.log('NORTH', computeNorthStopCoords(northStops, 500, 60, 40))
-        console.log('SOUTH', computeSouthStopCoords(southStops, 500, 60, 40, 28))
+    useEffect(() => {
+        const fetchTrains = async () => {
+            try {
+                setData({isFetching: true, trains: data.trains})
+                const response = await axios.get('/api/orange')
+                setData({isFetching: false, trains: response.data})
+            } catch(e) {
+                console.log(e)
+                setData({isFetching: false, trains: data.trains})
+            }
+        }
+        fetchTrains()
+    }, [])
 
-    }
+    const stops = collectStops()
+    const points = collectPoints(stops)
 
-    stopsToPoints(stopsList) {
-        return stopsList.reduce((acc, stop) => acc.concat([stop.x, stop.y]), [])
-    }
+    console.log("trains", data.trains)
 
-    render() {
-        const stops = collectStops()
-        const points = collectPoints(stops)
-
-       return (
-           <Stage width={window.outerWidth} height={window.outerHeight}>
-               <Layer>
-                   <Text text="Here are the active new orange line trains now" />
-                    <Line
-                        points={points}
-                        stroke='orange'
-                        strokeWidth={30}
-                        lineCap='round'
-                        lineJoin='round'
-                        tension={0}
-                    />
-                    {stops.map(stop => {
-                        return (
-                        <Group key={stop.name}>
-                            <Label x={stop.x + 20} y={stop.y - 3}>
-                                <Tag />
-                                <Text text={stop.name} />
-                            </Label>
-                            <Circle name={stop.name} x={stop.x} y={stop.y} fill='white' radius={8} stroke='black' />
-                        </Group>
-                        )
-                    })}
-               </Layer>
-           </Stage>
-       )
-    }
+    return (
+        <Stage width={window.outerWidth} height={window.outerHeight} scaleX={.8} scaleY={.8}>
+            <Layer>
+                <Text text="Here are the active new orange line trains now" />
+                <Line
+                    points={points}
+                    stroke='orange'
+                    strokeWidth={30}
+                    lineCap='round'
+                    lineJoin='round'
+                    tension={0}
+                />
+                {stops.map(stop => {
+                    return (
+                    <Group key={stop.name}>
+                        <Label x={stop.x + 20} y={stop.y - 4}>
+                            <Tag />
+                            <Text text={stop.name} />
+                        </Label>
+                        <Circle name={stop.name} x={stop.x} y={stop.y} fill='white' radius={8} stroke='black' />
+                    </Group>
+                    )
+                })}
+            </Layer>
+        </Stage>
+    )
 }
 
 export default TrainsNow;
