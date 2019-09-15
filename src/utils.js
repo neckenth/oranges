@@ -68,3 +68,16 @@ export function collectStops() {
 export function collectPoints(stops) {
   return stops.reduce((acc, stop) => acc.concat([stop.x, stop.y]), []);
 }
+
+export function determineColor(stop, trains) {
+  const activeStop = trains.find((t) => t.stopName === stop.name);
+  if (!activeStop) {
+    return 'white';
+  } if (activeStop.status === 'STOPPED_AT') {
+    return 'red';
+  } if (activeStop.status === 'IN_TRANSIT_TO') {
+    return 'yellow';
+  } if (activeStop.status === 'INCOMING_AT') {
+    return 'green';
+  }
+}
