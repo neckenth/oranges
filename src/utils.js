@@ -80,4 +80,5 @@ export function determineColor(stop, trains) {
   } if (activeStop.status === 'INCOMING_AT') {
     return 'green';
   }
+  return 'white';
 }

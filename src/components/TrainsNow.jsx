@@ -56,7 +56,7 @@ function TrainsNow() {
           const direction = data.trains.find(t => t.stopName === stop.name)
             ? data.trains.find(t => t.stopName === stop.name).direction
             : null;
-          const yOffset = direction && direction === "northbound" ? 5 : -5;
+          const yOffset = direction && direction === "northbound" ? -5 : 5;
           return (
             <Group key={stop.name}>
               <Label x={stop.x + 20} y={stop.y - 4}>

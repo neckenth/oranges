@@ -10,28 +10,77 @@ function vehicleIsNew(vehicleNum) {
 }
 
 /**
- * Maps API response data to limited # of human-readable keys relevant for frontend
+ * Filters vehicles array from API response down to only data relative to "new" vehicles
  *
- * @param {object} vehicle The nested vehicle object from response array
- * @param {array} stopData "included" array of stop metadata objects from API response
- * @returns {object}
+ * @param {Array} vehicles raw vehicle object from API response
+ * @returns {Array} filtered vehicles array
  */
-function narrowData(vehicle, stopData) {
-  const stopName = stopData.find(
-    (stop) => stop.id === vehicle.relationships.stop.data.id,
-  ).attributes.name;
+function filterVehicles(vehicles) {
+  return vehicles.filter((v) => !vehicleIsNew(Number(v.attributes.label)));
+}
 
+/**
+ * Determines stop direction based on vehicle's direction id
+ * Based on similar function from newtrains.today source code
+ * https://github.com/mathcolo/tracker-static/blob/8bb4fc0b02db501566e37ab58d2232259d1031d5/src/nl_functions.js#L21
+ *
+ * @param {object} vehicle One nested vehicle object from response array
+ * @returns {string} direction - options: northbound, southbound
+ */
+function getVehicleDirection(vehicle) {
+  return vehicle.attributes.direction_id ? 'northbound' : 'southbound';
+}
+
+/**
+ * Determines stop name by iterating through included stop data
+ * and matching stop id with nested vehicle's stop id
+ *
+ * @param {object} vehicle One nested vehicle object from response array
+ * @param {Array} stopData Array of nested stop data - "included" from API response
+ * @returns {string} stop name
+ */
+function getStopName(vehicle, stopData) {
+  return stopData.find((stop) => stop.id === vehicle.relationships.stop.data.id).attributes.name;
+}
+
+/**
+ * Parses singular vehicle data from API into object w/ only necessary keys
+ *
+ * @param {object} vehicle One nested vehicle object from response array
+ * @param {string} stopName Previously returned stopName
+ * @param {string} direction Previously returned direction - options: northbound, southbound
+ * @returns {object} limited keys: vehicleNum, status, stopId, direction, stopName
+ */
+function getDataPerVehicle(vehicle, stopName, direction) {
   return {
     vehicleNum: vehicle.attributes.label,
     status: vehicle.attributes.current_status,
     stopId: vehicle.relationships.stop.data.id,
-    // https://github.com/mathcolo/tracker-static/blob/8bb4fc0b02db501566e37ab58d2232259d1031d5/src/nl_functions.js#L21
-    direction: vehicle.attributes.direction_id ? 'northbound' : 'southbound',
+    direction,
     stopName,
   };
 }
 
+/**
+ * Orchestrator function to parse API response and return necessary data for frontend
+ *
+ * @param {object} resData raw response data from MBTA API
+ * two keys:
+ * data - array of orange line vehicle data
+ * included - array of orange line stop data
+ * @returns {Array} array of necessary vehicle data
+ */
+function getVehiclesAndStops(resData) {
+  const { data: vehicleData, included: stopData } = resData;
+  const newVehicles = filterVehicles(vehicleData);
+  const final = newVehicles.map((v) => {
+    const stopName = getStopName(v, stopData);
+    const direction = getVehicleDirection(v);
+    return getDataPerVehicle(v, stopName, direction);
+  });
+  return final;
+}
+
 module.exports = {
-  vehicleIsNew,
-  narrowData,
+  getVehiclesAndStops,
 };
