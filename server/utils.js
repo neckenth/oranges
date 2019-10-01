@@ -85,4 +85,7 @@ module.exports = {
   getVehiclesAndStops,
   vehicleIsNew,
   filterVehicles,
+  getStopName,
+  getVehicleDirection,
+  getDataPerVehicle,
 };
