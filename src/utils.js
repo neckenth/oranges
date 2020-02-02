@@ -28,41 +28,56 @@ export const southStops = [
   { name: 'Forest Hills' },
 ];
 
-export function computeNorthStopCoords(stops, startX, startY, offset) {
-  const x = startX;
-  let y = startY;
-  return stops.map((stop) => {
-    stop.x = x;
-    stop.y = y;
-    y += offset;
-    return stop;
-  });
+export const stops = [...northStops, ...southStops]
+
+export const computeStopCoords = (stops) => {
+  const x = window.innerWidth
+  const yOffset = window.innerHeight / stops.length
+  const yCoords = [...Array(stops.length).keys()].map(i => (i + 1) * yOffset)
+  return stops.map((elem, i) => {
+    elem.x = x
+    elem.y = yCoords[i]
+    return elem
+  })
 }
 
+// export function computeNorthStopCoords(stops, startX, startY, offset) {
+//   const x = startX;
+//   let y = startY;
+//   return stops.map((stop) => {
+//     stop.x = x;
+//     stop.y = y;
+//     y += offset;
+//     return stop;
+//   });
+// }
 
-export function computeSouthStopCoords(stops, startX, startY, northOffset, southOffset) {
-  const northCoords = computeNorthStopCoords(northStops, startX, startY, northOffset);
-  const finalNorth = northCoords.slice(northCoords.length - 1)[0];
 
-  const finalX = finalNorth.x;
-  const finalY = finalNorth.y;
+// export function computeSouthStopCoords(stops, startX, startY, northOffset, southOffset) {
+//   const northCoords = computeNorthStopCoords(northStops, startX, startY, northOffset);
+//   const finalNorth = northCoords.slice(northCoords.length - 1)[0];
 
-  let x = finalX - southOffset;
-  let y = finalY + southOffset;
-  return stops.map((stop) => {
-    stop.x = x;
-    stop.y = y;
-    x -= southOffset;
-    y += southOffset;
-    return stop;
-  });
-}
+//   const finalX = finalNorth.x;
+//   const finalY = finalNorth.y;
+
+//   let x = finalX - southOffset;
+//   let y = finalY + southOffset;
+//   return stops.map((stop) => {
+//     stop.x = x;
+//     stop.y = y;
+//     x -= southOffset;
+//     y += southOffset;
+//     return stop;
+//   });
+// }
 
 export function collectStops() {
-  return [
-    ...computeNorthStopCoords(northStops, 800, 40, 40),
-    ...computeSouthStopCoords(southStops, 800, 40, 40, 29),
-  ];
+  // return [
+  //   ...computeNorthStopCoords(northStops, 800, 40, 40),
+  //   ...computeSouthStopCoords(southStops, 800, 40, 40, 29),
+  // ];
+  console.log(computeStopCoords(stops))
+  return computeStopCoords(stops)
 }
 
 export function collectPoints(stops) {

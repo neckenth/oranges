@@ -14,7 +14,35 @@ module.exports = {
         test: /.jsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader']
-      }
+      },
+      {
+        // look for .css or .scss files
+        test: /\.(css|scss)$/,
+        // in the `src` directory
+        // include: [path.resolve(paths.appSrc)],
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              // discardDuplicates: true,
+              // importLoaders: 1,
+              // This enables local scoped CSS based in CSS Modules spec
+              modules: true,
+              // generates a unique name for each class (e.g. app__app___2x3cr)
+              // localIdentName: '[name]__[local]___[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
     ]
   },
   mode: 'development',
@@ -22,7 +50,7 @@ module.exports = {
   devtool: 'source-map',
   watch: true,
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: []
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Map from './Map'
 import Konva from "konva";
 import {
   Stage,
@@ -34,19 +35,31 @@ function TrainsNow() {
   const stops = collectStops();
   const points = collectPoints(stops);
 
+  const isMobile = window.screen.width < 500
+  const scaleX = isMobile ? .73 : .73
+  const strokeWidth = isMobile ? 80 : 30
+  const radius = isMobile ? 20 : 8
+  const xSpace = isMobile ? 50 : 20
+  const ySpace = isMobile ? 8 : 4
+  const fontSize = isMobile ? 24 : 12
+
+
   return (
-    <Stage
-      width={window.outerWidth}
-      height={window.outerHeight}
-      scaleX={0.8}
-      scaleY={0.8}
+    <div>
+      <Map />
+    {/* <Stage
+      width={window.innerWidth * .8}
+      height={window.innerHeight}
+      scaleX={scaleX}
+      scaleY={0.73}
+      offsetX={window.innerWidth / -.5}
     >
       <Layer>
         <Text text="Here are the active new orange line trains now" />
         <Line
           points={points}
           stroke="orange"
-          strokeWidth={30}
+          strokeWidth={strokeWidth}
           lineCap="round"
           lineJoin="round"
           tension={0}
@@ -59,9 +72,9 @@ function TrainsNow() {
           const yOffset = direction && direction === "northbound" ? -5 : 5;
           return (
             <Group key={stop.name}>
-              <Label x={stop.x + 20} y={stop.y - 4}>
+              <Label x={stop.x + xSpace} y={stop.y - ySpace}>
                 <Tag />
-                <Text text={stop.name} />
+                <Text text={stop.name} fontSize={fontSize} fontStyle="bold" />
               </Label>
               {direction ? (
                 <Arrow
@@ -75,7 +88,7 @@ function TrainsNow() {
                   x={stop.x}
                   y={stop.y}
                   fill={color}
-                  radius={8}
+                  radius={radius}
                   stroke="black"
                 />
               )}
@@ -83,7 +96,8 @@ function TrainsNow() {
           );
         })}
       </Layer>
-    </Stage>
+    </Stage> */}
+    </div>
   );
 }
 

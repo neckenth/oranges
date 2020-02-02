@@ -1,0 +1,15 @@
+body {
+    font-size: 30px;
+}
+
+
+.konvajs-content {
+        background: yellow;
+        width: 100% !important;
+        height: auto !important;
+        padding-bottom: 75%; // height/width*100%;
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    }

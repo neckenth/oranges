@@ -17,7 +17,7 @@ test('correctly filters vehicles array to only new vehicles', () => {
 });
 
 
-describe('narrowing API data to only specified train details for relevant trains', () => {
+describe('getVehiclesAndStops orchestrator function', () => {
   const response = {
     included: [
       {
@@ -139,12 +139,18 @@ describe('narrowing API data to only specified train details for relevant trains
       type: 'vehicle',
     }],
   };
+  const { data: vehicleData, included: stopData } = response;
 
-  test('returns an object with only specified train details in keys', () => {
-
-    const { data: vehicleData, included: stopData } = response;
+  test('filterVehicles correctly returns an array of only new vehicles', () => {
 
     expect(Array.isArray(utils.filterVehicles(vehicleData))).toBe(true);
     expect(utils.filterVehicles(vehicleData)).toHaveLength(2);
   });
+
+  test('getStopName correctly identifies human name train\'s stopped location', () => {
+    expect(utils.getStopName(vehicleData[0], stopData)).toBe()
+
+})
 });
+
+
