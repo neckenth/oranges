@@ -1,7 +1,3 @@
-export function stopsToPoints(stopsList) {
-  return stopsList.reduce((acc, stop) => acc.concat([stop.x, stop.y]), []);
-}
-
 export const northStops = [
   { name: 'Oak Grove' },
   { name: 'Malden Center' },
@@ -28,72 +24,17 @@ export const southStops = [
   { name: 'Forest Hills' },
 ];
 
-export const stops = [...northStops, ...southStops]
-
-export const computeStopCoords = (stops) => {
-  const x = window.innerWidth
-  const yOffset = window.innerHeight / stops.length
-  const yCoords = [...Array(stops.length).keys()].map(i => (i + 1) * yOffset)
-  return stops.map((elem, i) => {
-    elem.x = x
-    elem.y = yCoords[i]
-    return elem
-  })
-}
-
-// export function computeNorthStopCoords(stops, startX, startY, offset) {
-//   const x = startX;
-//   let y = startY;
-//   return stops.map((stop) => {
-//     stop.x = x;
-//     stop.y = y;
-//     y += offset;
-//     return stop;
-//   });
-// }
-
-
-// export function computeSouthStopCoords(stops, startX, startY, northOffset, southOffset) {
-//   const northCoords = computeNorthStopCoords(northStops, startX, startY, northOffset);
-//   const finalNorth = northCoords.slice(northCoords.length - 1)[0];
-
-//   const finalX = finalNorth.x;
-//   const finalY = finalNorth.y;
-
-//   let x = finalX - southOffset;
-//   let y = finalY + southOffset;
-//   return stops.map((stop) => {
-//     stop.x = x;
-//     stop.y = y;
-//     x -= southOffset;
-//     y += southOffset;
-//     return stop;
-//   });
-// }
-
-export function collectStops() {
-  // return [
-  //   ...computeNorthStopCoords(northStops, 800, 40, 40),
-  //   ...computeSouthStopCoords(southStops, 800, 40, 40, 29),
-  // ];
-  console.log(computeStopCoords(stops))
-  return computeStopCoords(stops)
-}
-
-export function collectPoints(stops) {
-  return stops.reduce((acc, stop) => acc.concat([stop.x, stop.y]), []);
-}
+export const stops = [...northStops, ...southStops];
 
 export function determineColor(stop, trains) {
   const activeStop = trains.find((t) => t.stopName === stop.name);
-  if (!activeStop) {
-    return 'white';
-  } if (activeStop.status === 'STOPPED_AT') {
-    return 'red';
-  } if (activeStop.status === 'IN_TRANSIT_TO') {
-    return 'yellow';
-  } if (activeStop.status === 'INCOMING_AT') {
-    return 'green';
+  if (activeStop.status === 'STOPPED_AT') {
+    return '#ff0000';
+  } else if (activeStop.status === 'IN_TRANSIT_TO') {
+    return '#00ff00';
+  } else if (activeStop.status === 'INCOMING_AT') {
+    return '#00ff00';
+  } else {
+  return '#D6D6D6';
   }
-  return 'white';
 }

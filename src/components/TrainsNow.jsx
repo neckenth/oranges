@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Map from './Map'
-import Konva from "konva";
-import {
-  Stage,
-  Layer,
-  Text,
-  Line,
-  Circle,
-  Arrow,
-  Group,
-  Label,
-  Tag
-} from "react-konva";
-import { collectStops, collectPoints, determineColor } from "../utils";
+import './TrainsNow.scss'
+
+import {determineColor, stops } from "../utils";
 
 function TrainsNow() {
   const [data, setData] = useState({ isFetching: false, trains: [] });
@@ -32,71 +22,26 @@ function TrainsNow() {
     fetchTrains();
   }, []);
 
-  const stops = collectStops();
-  const points = collectPoints(stops);
+  function addStyles(stops, trains) {
+    for (let t = 0; t < trains.length; t++) {
+      for (let s = 0; s < stops.length; s++) {
+        if (trains[t].stopName === stops[s].name) {
+          stops[s].color = determineColor(stops[s], trains)
+        }
+      }
+    }
+    stops.map(elem => elem.color = elem.color || "#D6D6D6")
+    return stops
+  }
 
-  const isMobile = window.screen.width < 500
-  const scaleX = isMobile ? .73 : .73
-  const strokeWidth = isMobile ? 80 : 30
-  const radius = isMobile ? 20 : 8
-  const xSpace = isMobile ? 50 : 20
-  const ySpace = isMobile ? 8 : 4
-  const fontSize = isMobile ? 24 : 12
-
+  const styledStops = addStyles(stops, data.trains)
 
   return (
-    <div>
-      <Map />
-    {/* <Stage
-      width={window.innerWidth * .8}
-      height={window.innerHeight}
-      scaleX={scaleX}
-      scaleY={0.73}
-      offsetX={window.innerWidth / -.5}
-    >
-      <Layer>
-        <Text text="Here are the active new orange line trains now" />
-        <Line
-          points={points}
-          stroke="orange"
-          strokeWidth={strokeWidth}
-          lineCap="round"
-          lineJoin="round"
-          tension={0}
-        />
-        {stops.map(stop => {
-          const color = determineColor(stop, data.trains);
-          const direction = data.trains.find(t => t.stopName === stop.name)
-            ? data.trains.find(t => t.stopName === stop.name).direction
-            : null;
-          const yOffset = direction && direction === "northbound" ? -5 : 5;
-          return (
-            <Group key={stop.name}>
-              <Label x={stop.x + xSpace} y={stop.y - ySpace}>
-                <Tag />
-                <Text text={stop.name} fontSize={fontSize} fontStyle="bold" />
-              </Label>
-              {direction ? (
-                <Arrow
-                  points={[stop.x, stop.y, stop.x, stop.y + yOffset]}
-                  fill={color}
-                  stroke="black"
-                />
-              ) : (
-                <Circle
-                  name={stop.name}
-                  x={stop.x}
-                  y={stop.y}
-                  fill={color}
-                  radius={radius}
-                  stroke="black"
-                />
-              )}
-            </Group>
-          );
-        })}
-      </Layer>
-    </Stage> */}
+    <div class="flex-body">
+      <div />
+      <div class="flex-map">
+      {data.trains.length && <Map props={styledStops}/>}
+      </div>
     </div>
   );
 }
