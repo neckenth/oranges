@@ -22,6 +22,7 @@ function TrainsNow() {
   };
 
   useEffect(() => {
+    // https://dev.to/zhiyueyi/how-to-create-a-simple-react-countdown-timer-4mc3
     const timer =
       counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
     if (counter === 0) {
