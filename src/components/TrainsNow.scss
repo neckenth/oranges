@@ -1,8 +1,16 @@
-.flex-body {
+.container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    // position: relative;
 }
 
-.flex-map {
-    align-content: flex-end;
+.details {
+    position: absolute;
+    // z-index: 1000;
+}
+
+svg {
+    z-index: -1;
+    // position: absolute;
 }

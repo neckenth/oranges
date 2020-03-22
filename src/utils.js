@@ -38,3 +38,11 @@ export function determineColor(stop, trains) {
   return '#D6D6D6';
   }
 }
+
+export function findStopped(trains, direction) {
+  return trains.map(elem => elem.status === 'STOPPED_AT' && elem.direction === direction ? elem.stopName : null)
+}
+
+export function findInTransit(trains, direction) {
+  return trains.map(elem => (elem.status === 'IN_TRANSIT_TO' || elem.status === 'INCOMING_AT') && elem.direction === direction ? elem.stopName : null)
+}
