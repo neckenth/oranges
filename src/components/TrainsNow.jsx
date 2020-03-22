@@ -7,19 +7,32 @@ import {determineColor, stops, findStopped, findInTransit } from "../utils";
 
 function TrainsNow() {
   const [data, setData] = useState({ isFetching: false, trains: [] });
+  const [counter, setCounter] = useState(30)
+  const [lastRefreshed, setLastRefreshed] = useState(new Date())
+
+  const fetchTrains = async () => {
+    try {
+      setData({ isFetching: true, trains: data.trains });
+      const response = await axios.get("/api/orange");
+      setData({ isFetching: false, trains: response.data });
+    } catch (e) {
+      console.log(e);
+      setData({ isFetching: false, trains: data.trains });
+    }
+  };
 
   useEffect(() => {
-    const fetchTrains = async () => {
-      try {
-        setData({ isFetching: true, trains: data.trains });
-        const response = await axios.get("/api/orange");
-        setData({ isFetching: false, trains: response.data });
-      } catch (e) {
-        console.log(e);
-        setData({ isFetching: false, trains: data.trains });
-      }
-    };
-    fetchTrains();
+    if (counter > 0) {
+      setTimeout(() => setCounter(counter - 1), 1000)
+    } else {
+      setCounter(30)
+      fetchTrains()
+      setLastRefreshed(new Date())
+    }
+  }, [counter, fetchTrains])
+
+  useEffect(() => {
+    fetchTrains()
   }, []);
 
   const addStyles = (stops, trains) => {
@@ -60,6 +73,19 @@ function TrainsNow() {
     "marginLeft": "15px"
   }
 
+  const buttonStyles = {
+    "alignText": "center",
+    "backgroundColor": "#FB6C00",
+    "border": "solid",
+    "borderColor": "black",
+    "borderRadius": "20px",
+    "display": "flex",
+    "flexDirection": "column",
+    "borderWeight": "solid",
+    "marginTop": "15px",
+    "fontSize": "1.5em",
+    "justifyContent": "space-between"
+  }
 
   const svgStyles = {
     "zIndex": -1,
@@ -82,6 +108,14 @@ function TrainsNow() {
         {findStopped(data.trains, "southbound").map((elem, i) => <div key={i}>{elem}</div>)}
         <div style={{"marginTop": "5px", "fontWeight": "bold"}}>APPROACHING:</div>
         {findInTransit(data.trains, "southbound").map((elem, i) => <div key={i}>{elem}</div>)}
+      <button onClick={() => {
+        fetchTrains()
+        setLastRefreshed(new Date())
+        setCounter(30)
+        }} style={buttonStyles}>
+        <div>REFRESH 00:{counter > 9 ? counter: `0${counter}`}</div>
+      </button>
+      <div style={{"fontSize":".5em", "marginLeft": "5px", "marginTop": "5px"}}>Last refreshed: {lastRefreshed.toLocaleTimeString()}</div>
       </div>
       </div>
       <div>
