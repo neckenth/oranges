@@ -25,11 +25,12 @@ function TrainsNow() {
     if (counter > 0) {
       setTimeout(() => setCounter(counter - 1), 1000)
     } else {
+      clearTimeout()
       setCounter(30)
       fetchTrains()
       setLastRefreshed(new Date())
     }
-  }, [counter, fetchTrains])
+  }, [counter])
 
   useEffect(() => {
     fetchTrains()
@@ -90,6 +91,7 @@ function TrainsNow() {
   const svgStyles = {
     "zIndex": -1,
   }
+  console.log('COUNTER', counter)
 
   return (
     <div className="container" style={containerStyles}>
@@ -109,9 +111,9 @@ function TrainsNow() {
         <div style={{"marginTop": "5px", "fontWeight": "bold"}}>APPROACHING:</div>
         {findInTransit(data.trains, "southbound").map((elem, i) => <div key={i}>{elem}</div>)}
       <button onClick={() => {
-        fetchTrains()
-        setLastRefreshed(new Date())
-        setCounter(30)
+        // fetchTrains()
+        // setLastRefreshed(new Date())
+        setCounter(0)
         }} style={buttonStyles}>
         <div>REFRESH 00:{counter > 9 ? counter: `0${counter}`}</div>
       </button>
@@ -119,7 +121,7 @@ function TrainsNow() {
       </div>
       </div>
       <div>
-        {data.trains.length && <Map props={styledStops} style={svgStyles}/>}
+        {<Map props={styledStops} style={svgStyles}/>}
       </div>
     </div>
   );
