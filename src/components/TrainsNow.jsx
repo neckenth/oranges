@@ -97,7 +97,6 @@ function TrainsNow() {
   const svgStyles = {
     zIndex: -1
   };
-  console.log("COUNTER", counter);
 
   return (
     <div className="container" style={containerStyles}>
