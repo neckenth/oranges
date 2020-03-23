@@ -16,3 +16,5 @@ Node app to consume MBTA API and show active _new_ orange line trains
 
 ## credits
 * algorithm to determine which MBTA trains are "new" based on [newtrains.today](https://newtrains.today/)
+
+<img width="284" alt="Screen Shot 2020-03-22 at 9 05 01 PM" src="https://user-images.githubusercontent.com/22733487/77270051-1d841d80-6c81-11ea-838d-a1b8e035904a.png">
