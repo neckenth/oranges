@@ -8,8 +8,8 @@
     "build": "webpack --config webpack.config.js",
     "start-dev": "NODE_ENV=development nodemon main.js",
     "start": "node main.js",
-    "lint": "./node_modules/.bin/eslint .",
-    "format": "./node_modules/.bin/eslint --fix .",
+    "lint": "eslint .",
+    "format": "eslint --fix .",
     "heroku-postbuild": "webpack -p --config ./webpack.config.js"
   },
   "author": "",
@@ -42,7 +42,6 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "file-loader": "^6.0.0",
     "jest": "^24.9.0",
-    "node-sass": "^4.13.1",
     "nodemon": "^1.19.1",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3",

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Map from "./Map";
-import "./TrainsNow.scss";
 import GitHubLogo from "../../public/0035c307a36c17babb8d25cd02fb6488.png";
 
 import { determineColor, stops, findStopped, findInTransit } from "../utils";
