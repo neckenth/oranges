@@ -145,8 +145,4 @@ describe('getVehiclesAndStops orchestrator function', () => {
     expect(Array.isArray(utils.filterVehicles(vehicleData))).toBe(true);
     expect(utils.filterVehicles(vehicleData)).toHaveLength(2);
   });
-
-  test('getStopName correctly identifies human name train\'s stopped location', () => {
-    expect(utils.getStopName(vehicleData[0], stopData)).toBe();
-  });
 });

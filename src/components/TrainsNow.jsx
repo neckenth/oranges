@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Map from "./Map";
 import "./TrainsNow.scss";
+import GitHubLogo from "../../public/dist/0035c307a36c17babb8d25cd02fb6488.png";
 
 import { determineColor, stops, findStopped, findInTransit } from "../utils";
 
@@ -102,53 +103,77 @@ function TrainsNow() {
     <div className="container" style={containerStyles}>
       <div className="details" style={detailsStyles}>
         <h1 style={{ wordBreak: "normal" }}>Orange Line Trains</h1>
-        <div style={{ marginBottom: "10px" }}>
-          <h2>NORTHBOUND</h2>
-          <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-            STOPPED AT:
+        {data.trains.length ? (
+          <div>
+            <div style={{ marginBottom: "10px" }}>
+              <h2>NORTHBOUND</h2>
+              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
+                STOPPED AT:
+              </div>
+              {findStopped(data.trains, "northbound").map((elem, i) => (
+                <div key={i}>{elem}</div>
+              ))}
+              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
+                APPROACHING:
+              </div>
+              {findInTransit(data.trains, "northbound").map((elem, i) => (
+                <div key={i}>{elem}</div>
+              ))}
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <h2>SOUTHBOUND</h2>
+              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
+                STOPPED AT:
+              </div>
+              {findStopped(data.trains, "southbound").map((elem, i) => (
+                <div key={i}>{elem}</div>
+              ))}
+              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
+                APPROACHING:
+              </div>
+              {findInTransit(data.trains, "southbound").map((elem, i) => (
+                <div key={i}>{elem}</div>
+              ))}
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  fetchTrains();
+                  setLastRefreshed(new Date());
+                  setCounter(30);
+                }}
+                style={buttonStyles}
+              >
+                <div>REFRESH 00:{counter > 9 ? counter : `0${counter}`}</div>
+              </button>
+              <div
+                style={{
+                  fontSize: ".5em",
+                  marginLeft: "5px",
+                  marginTop: "5px"
+                }}
+              >
+                Last refreshed: {lastRefreshed.toLocaleTimeString()}
+              </div>
+            </div>
           </div>
-          {findStopped(data.trains, "northbound").map((elem, i) => (
-            <div key={i}>{elem}</div>
-          ))}
-          <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-            APPROACHING:
-          </div>
-          {findInTransit(data.trains, "northbound").map((elem, i) => (
-            <div key={i}>{elem}</div>
-          ))}
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <h2>SOUTHBOUND</h2>
-          <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-            STOPPED AT:
-          </div>
-          {findStopped(data.trains, "southbound").map((elem, i) => (
-            <div key={i}>{elem}</div>
-          ))}
-          <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-            APPROACHING:
-          </div>
-          {findInTransit(data.trains, "southbound").map((elem, i) => (
-            <div key={i}>{elem}</div>
-          ))}
-          <button
-            onClick={() => {
-              fetchTrains();
-              setLastRefreshed(new Date());
-              setCounter(30);
-            }}
-            style={buttonStyles}
-          >
-            <div>REFRESH 00:{counter > 9 ? counter : `0${counter}`}</div>
-          </button>
-          <div
-            style={{ fontSize: ".5em", marginLeft: "5px", marginTop: "5px" }}
-          >
-            Last refreshed: {lastRefreshed.toLocaleTimeString()}
-          </div>
-        </div>
+        ) : (
+          <h2>No new trains on the 🍊line</h2>
+        )}
       </div>
       <div>{<Map props={styledStops} style={svgStyles} />}</div>
+      <a href="https://github.com/neckenth/oranges">
+        <img
+          src={GitHubLogo}
+          style={{
+            height: isMobile ? "40px" : "20px",
+            width: isMobile ? "40px" : "20px",
+            bottom: isMobile ? 20 : 10,
+            right: isMobile ? 20 : 10,
+            position: "absolute"
+          }}
+        />
+      </a>
     </div>
   );
 }

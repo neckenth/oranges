@@ -16,7 +16,7 @@ function vehicleIsNew(vehicleNum) {
  * @returns {Array} filtered vehicles array
  */
 function filterVehicles(vehicles) {
-  return vehicles.filter((v) => !vehicleIsNew(Number(v.attributes.label)));
+  return vehicles.filter((v) => vehicleIsNew(Number(v.attributes.label)));
 }
 
 /**
