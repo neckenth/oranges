@@ -168,8 +168,8 @@ function TrainsNow() {
           style={{
             height: isMobile ? "40px" : "20px",
             width: isMobile ? "40px" : "20px",
-            bottom: isMobile ? 20 : 10,
-            right: isMobile ? 20 : 10,
+            bottom: 20,
+            right: 20,
             position: "absolute"
           }}
         />
