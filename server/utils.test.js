@@ -17,7 +17,7 @@ test('correctly filters vehicles array to only new vehicles', () => {
 });
 
 
-describe('narrowing API data to only specified train details for relevant trains', () => {
+describe('getVehiclesAndStops orchestrator function', () => {
   const response = {
     included: [
       {
@@ -139,34 +139,10 @@ describe('narrowing API data to only specified train details for relevant trains
       type: 'vehicle',
     }],
   };
-
   const { data: vehicleData, included: stopData } = response;
 
-  const lastVehicle = vehicleData[vehicleData.length - 1];
-
-
-  test('properly filters API response data to only relevant vehicles', () => {
+  test('filterVehicles correctly returns an array of only new vehicles', () => {
     expect(Array.isArray(utils.filterVehicles(vehicleData))).toBe(true);
     expect(utils.filterVehicles(vehicleData)).toHaveLength(2);
-  });
-
-  test('correctly identifies the human stop name of a vehicle', () => {
-    expect(utils.getStopName(vehicleData[vehicleData.length - 1], stopData)).toBe('Wellington');
-  });
-
-  test('correctly identifies direction of a vehicle', () => {
-    expect(utils.getVehicleDirection(vehicleData[vehicleData.length - 1])).toBe('southbound');
-  });
-
-  test('reshapes and filters vehicle data to only necessary information', () => {
-    const expected = {
-      vehicleNum: lastVehicle.attributes.label,
-      status: lastVehicle.attributes.current_status,
-      stopId: lastVehicle.relationships.stop.data.id,
-      direction: utils.getVehicleDirection(lastVehicle, stopData),
-      stopName: utils.getStopName(lastVehicle, stopData),
-    };
-
-    expect(utils.getDataPerVehicle(lastVehicle, 'Wellington', 'southbound')).toMatchObject(expected);
   });
 });

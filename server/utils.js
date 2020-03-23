@@ -86,6 +86,4 @@ module.exports = {
   vehicleIsNew,
   filterVehicles,
   getStopName,
-  getVehicleDirection,
-  getDataPerVehicle,
 };
