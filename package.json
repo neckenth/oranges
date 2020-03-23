@@ -18,10 +18,8 @@
     "core-js": "^3.2.1",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
-    "konva": "^4.0.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-konva": "^16.9.0-0",
     "volleyball": "^1.5.1"
   },
   "devDependencies": {
