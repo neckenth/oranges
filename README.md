@@ -1,5 +1,5 @@
 # oranges
-Node app to consume MBTA API and show active _new_ orange line trains
+Node app to consume MBTA API and show active _new_ orange line trains. Intended for primarily mobile use, but web also works.
 
 ## requirements
 * built with Node version 10.16.3
