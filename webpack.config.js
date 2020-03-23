@@ -50,7 +50,6 @@ module.exports = {
   mode: "development",
   context: __dirname,
   devtool: "source-map",
-  watch: true,
   resolve: {
     extensions: [".js", ".jsx", ".scss"]
   },
