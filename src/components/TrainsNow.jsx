@@ -45,7 +45,12 @@ function TrainsNow() {
         }
       }
     }
-    stops.map(elem => (elem.color = elem.color || "#D6D6D6"));
+    const activeStopNames = trains.map(elem => elem.stopName);
+    stops.map(elem =>
+      !activeStopNames.includes(elem.name)
+        ? (elem.color = "#D6D6D6")
+        : (elem.color = elem.color)
+    );
     return stops;
   };
 
@@ -80,6 +85,13 @@ function TrainsNow() {
     marginLeft: "15px"
   };
 
+  const dotStyles = {
+    height: "25px",
+    width: "25px",
+    borderRadius: "50%",
+    display: "inline-block"
+  };
+
   const buttonStyles = {
     alignText: "center",
     backgroundColor: "#FB6C00",
@@ -101,19 +113,25 @@ function TrainsNow() {
   return (
     <div className="container" style={containerStyles}>
       <div className="details" style={detailsStyles}>
-        <h1 style={{ wordBreak: "normal" }}>Orange Line Trains</h1>
+        <h1 style={{ wordBreak: "normal" }}>New 🍊 Line Trains</h1>
         {data.trains.length ? (
           <div>
             <div style={{ marginBottom: "10px" }}>
               <h2>NORTHBOUND</h2>
               <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                STOPPED AT:
+                STOPPED AT:{" "}
+                <span
+                  style={{ ...dotStyles, ...{ backgroundColor: "#ff0000" } }}
+                />
               </div>
               {findStopped(data.trains, "northbound").map((elem, i) => (
                 <div key={i}>{elem}</div>
               ))}
               <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                APPROACHING:
+                APPROACHING:{" "}
+                <span
+                  style={{ ...dotStyles, ...{ backgroundColor: "#00ff00" } }}
+                />
               </div>
               {findInTransit(data.trains, "northbound").map((elem, i) => (
                 <div key={i}>{elem}</div>
@@ -122,43 +140,49 @@ function TrainsNow() {
             <div style={{ marginBottom: "10px" }}>
               <h2>SOUTHBOUND</h2>
               <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                STOPPED AT:
+                STOPPED AT:{" "}
+                <span
+                  style={{ ...dotStyles, ...{ backgroundColor: "#ff0000" } }}
+                />
               </div>
               {findStopped(data.trains, "southbound").map((elem, i) => (
                 <div key={i}>{elem}</div>
               ))}
               <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                APPROACHING:
+                APPROACHING:{" "}
+                <span
+                  style={{ ...dotStyles, ...{ backgroundColor: "#00ff00" } }}
+                />
               </div>
               {findInTransit(data.trains, "southbound").map((elem, i) => (
                 <div key={i}>{elem}</div>
               ))}
             </div>
-            <div>
-              <button
-                onClick={() => {
-                  fetchTrains();
-                  setLastRefreshed(new Date());
-                  setCounter(30);
-                }}
-                style={buttonStyles}
-              >
-                <div>REFRESH 00:{counter > 9 ? counter : `0${counter}`}</div>
-              </button>
-              <div
-                style={{
-                  fontSize: ".5em",
-                  marginLeft: "5px",
-                  marginTop: "5px"
-                }}
-              >
-                Last refreshed: {lastRefreshed.toLocaleTimeString()}
-              </div>
-            </div>
           </div>
         ) : (
-          <h2>No new trains on the 🍊line</h2>
+          <h2>No new 🍊 line trains</h2>
         )}
+        <div>
+          <button
+            onClick={() => {
+              fetchTrains();
+              setLastRefreshed(new Date());
+              setCounter(30);
+            }}
+            style={buttonStyles}
+          >
+            <div>REFRESH 00:{counter > 9 ? counter : `0${counter}`}</div>
+          </button>
+          <div
+            style={{
+              fontSize: ".5em",
+              marginLeft: "5px",
+              marginTop: "5px"
+            }}
+          >
+            Last refreshed: {lastRefreshed.toLocaleTimeString()}
+          </div>
+        </div>
       </div>
       <div>{<Map props={styledStops} style={svgStyles} />}</div>
       <a href="https://github.com/neckenth/oranges">

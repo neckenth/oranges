@@ -34,9 +34,8 @@ export function determineColor(stop, trains) {
     return '#00ff00';
   } else if (activeStop.status === 'INCOMING_AT') {
     return '#00ff00';
-  } else {
-  return '#D6D6D6';
   }
+  return '#D6D6D6';
 }
 
 export function findStopped(trains, direction) {
