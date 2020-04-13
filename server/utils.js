@@ -16,7 +16,7 @@ function vehicleIsNew(vehicleNum) {
  * @returns {Array} filtered vehicles array
  */
 function filterVehicles(vehicles) {
-  return vehicles.filter((v) => vehicleIsNew(Number(v.attributes.label)));
+  return vehicles.filter((v) => !vehicleIsNew(Number(v.attributes.label)));
 }
 
 /**
@@ -40,7 +40,19 @@ function getVehicleDirection(vehicle) {
  * @returns {string} stop name
  */
 function getStopName(vehicle, stopData) {
-  return stopData.find((stop) => stop.id === vehicle.relationships.stop.data.id).attributes.name;
+  return stopData.find((stop) => stop.id === vehicle.relationships.stop.data.id)
+    .attributes.name;
+}
+
+function getStopColor(vehicle) {
+  const status = vehicle.attributes.current_status;
+  if (status === 'IN_TRANSIT_TO' || status === 'INCOMING_AT') {
+    return '#00ff00';
+  }
+  if (status === 'STOPPED_AT') {
+    return '#ff0000';
+  }
+  return '#d6d6d6';
 }
 
 /**
@@ -49,14 +61,16 @@ function getStopName(vehicle, stopData) {
  * @param {object} vehicle One nested vehicle object from response array
  * @param {string} stopName Previously returned stopName
  * @param {string} direction Previously returned direction - options: northbound, southbound
- * @returns {object} limited keys: vehicleNum, status, stopId, direction, stopName
+ * @param {string} color Previously returned color hex - options: #00ff00, #ff0000, #d6d6d6
+ * @returns {object} limited keys: vehicleNum, status, stopId, direction, stopName, color
  */
-function getDataPerVehicle(vehicle, stopName, direction) {
+function getDataPerVehicle(vehicle, stopName, direction, color) {
   return {
     vehicleNum: vehicle.attributes.label,
     status: vehicle.attributes.current_status,
     stopId: vehicle.relationships.stop.data.id,
     direction,
+    color,
     stopName,
   };
 }
@@ -76,7 +90,8 @@ function getVehiclesAndStops(resData) {
   const final = newVehicles.map((v) => {
     const stopName = getStopName(v, stopData);
     const direction = getVehicleDirection(v);
-    return getDataPerVehicle(v, stopName, direction);
+    const color = getStopColor(v);
+    return getDataPerVehicle(v, stopName, direction, color);
   });
   return final;
 }

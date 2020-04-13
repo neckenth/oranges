@@ -32,7 +32,7 @@ app.get('/api/orange', async (req, res, next) => {
     const { data } = await axios.get(URL, config);
     return res.status(200).json(utils.getVehiclesAndStops(data));
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 

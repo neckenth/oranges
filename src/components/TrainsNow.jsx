@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Map from "./Map";
 import GitHubLogo from "../../public/0035c307a36c17babb8d25cd02fb6488.png";
+import TextContainer from "./TextContainer";
+import "../../public/styles.css";
 
-import { determineColor, stops, findStopped, findInTransit } from "../utils";
+import { stops } from "../utils";
 
 function TrainsNow() {
   const [data, setData] = useState({ isFetching: false, trains: [] });
@@ -37,16 +39,16 @@ function TrainsNow() {
     fetchTrains();
   }, []);
 
-  const addStyles = (stops, trains) => {
+  const addColors = (stops, trains) => {
     for (let t = 0; t < trains.length; t++) {
       for (let s = 0; s < stops.length; s++) {
         if (trains[t].stopName === stops[s].name) {
-          stops[s].color = determineColor(stops[s], trains);
+          stops[s].color = trains[t].color;
         }
       }
     }
-    const activeStopNames = trains.map(elem => elem.stopName);
-    stops.map(elem =>
+    const activeStopNames = trains.map((elem) => elem.stopName);
+    stops.map((elem) =>
       !activeStopNames.includes(elem.name)
         ? (elem.color = "#D6D6D6")
         : (elem.color = elem.color)
@@ -54,7 +56,7 @@ function TrainsNow() {
     return stops;
   };
 
-  const styledStops = addStyles(stops, data.trains);
+  const styledStops = addColors(stops, data.trains);
 
   let isMobile = false;
   // device detection to conditionally apply absolute positioning
@@ -70,130 +72,24 @@ function TrainsNow() {
     isMobile = true;
   }
 
-  const containerStyles = {
-    display: "flex",
-    justifyContent: "space-between",
-    overflowY: "hidden"
-  };
-
-  const detailsStyles = {
-    position: isMobile ? "absolute" : null,
-    display: "flex",
-    flexDirection: "column",
-    fontFamily: "Arial",
-    fontSize: isMobile ? "2em" : "1em",
-    marginLeft: "15px"
-  };
-
-  const dotStyles = {
-    height: "25px",
-    width: "25px",
-    borderRadius: "50%",
-    display: "inline-block"
-  };
-
-  const buttonStyles = {
-    alignText: "center",
-    backgroundColor: "#FB6C00",
-    border: "solid",
-    borderColor: "black",
-    borderRadius: "20px",
-    display: "flex",
-    flexDirection: "column",
-    borderWeight: "solid",
-    marginTop: "15px",
-    fontSize: "1.5em",
-    justifyContent: "space-between"
-  };
-
-  const svgStyles = {
-    zIndex: -1
-  };
-
   return (
-    <div className="container" style={containerStyles}>
-      <div className="details" style={detailsStyles}>
-        <h1 style={{ wordBreak: "normal" }}>New 🍊 Line Trains</h1>
-        {data.trains.length ? (
-          <div>
-            <div style={{ marginBottom: "10px" }}>
-              <h2>NORTHBOUND</h2>
-              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                STOPPED AT:{" "}
-                <span
-                  style={{ ...dotStyles, ...{ backgroundColor: "#ff0000" } }}
-                />
-              </div>
-              {findStopped(data.trains, "northbound").map((elem, i) => (
-                <div key={i}>{elem}</div>
-              ))}
-              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                APPROACHING:{" "}
-                <span
-                  style={{ ...dotStyles, ...{ backgroundColor: "#00ff00" } }}
-                />
-              </div>
-              {findInTransit(data.trains, "northbound").map((elem, i) => (
-                <div key={i}>{elem}</div>
-              ))}
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <h2>SOUTHBOUND</h2>
-              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                STOPPED AT:{" "}
-                <span
-                  style={{ ...dotStyles, ...{ backgroundColor: "#ff0000" } }}
-                />
-              </div>
-              {findStopped(data.trains, "southbound").map((elem, i) => (
-                <div key={i}>{elem}</div>
-              ))}
-              <div style={{ marginTop: "5px", fontWeight: "bold" }}>
-                APPROACHING:{" "}
-                <span
-                  style={{ ...dotStyles, ...{ backgroundColor: "#00ff00" } }}
-                />
-              </div>
-              {findInTransit(data.trains, "southbound").map((elem, i) => (
-                <div key={i}>{elem}</div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <h2>No new 🍊 line trains</h2>
-        )}
-        <div>
-          <button
-            onClick={() => {
-              fetchTrains();
-              setLastRefreshed(new Date());
-              setCounter(30);
-            }}
-            style={buttonStyles}
-          >
-            <div>REFRESH 00:{counter > 9 ? counter : `0${counter}`}</div>
-          </button>
-          <div
-            style={{
-              fontSize: ".5em",
-              marginLeft: "5px",
-              marginTop: "5px"
-            }}
-          >
-            Last refreshed: {lastRefreshed.toLocaleTimeString()}
-          </div>
-        </div>
-      </div>
-      <div>{<Map props={styledStops} style={svgStyles} />}</div>
+    <div className="container">
+      <TextContainer
+        counter={counter}
+        setCounter={setCounter}
+        lastRefreshed={lastRefreshed}
+        setLastRefreshed={setLastRefreshed}
+        fetchTrains={fetchTrains}
+        trains={data.trains}
+      />
+      <div>{<Map props={styledStops} />}</div>
       <a href="https://github.com/neckenth/oranges">
         <img
           src={GitHubLogo}
+          className="logo"
           style={{
             height: isMobile ? "40px" : "20px",
             width: isMobile ? "40px" : "20px",
-            bottom: 20,
-            right: 20,
-            position: "absolute"
           }}
         />
       </a>
