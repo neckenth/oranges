@@ -370,14 +370,14 @@ const Map = (props) => {
               </tspan>
             </text>
             <text
-              id="chinawtownLabel"
+              id="chinatownLabel"
               fontFamily="Arial-BoldMT, Arial"
               fontSize="9"
               fontWeight="bold"
               fill="#000000"
             >
               <tspan x="199" y="304">
-                Chinawtown
+                Chinatown
               </tspan>
             </text>
             <text
