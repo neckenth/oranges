@@ -16,7 +16,7 @@ function vehicleIsNew(vehicleNum) {
  * @returns {Array} filtered vehicles array
  */
 function filterVehicles(vehicles) {
-  return vehicles.filter((v) => !vehicleIsNew(Number(v.attributes.label)));
+  return vehicles.filter((v) => vehicleIsNew(Number(v.attributes.label)));
 }
 
 /**
@@ -28,7 +28,7 @@ function filterVehicles(vehicles) {
  * @returns {string} direction - options: northbound, southbound
  */
 function getVehicleDirection(vehicle) {
-  return vehicle.attributes.direction_id ? 'northbound' : 'southbound';
+  return vehicle.attributes.direction_id ? "northbound" : "southbound";
 }
 
 /**
@@ -46,13 +46,13 @@ function getStopName(vehicle, stopData) {
 
 function getStopColor(vehicle) {
   const status = vehicle.attributes.current_status;
-  if (status === 'IN_TRANSIT_TO' || status === 'INCOMING_AT') {
-    return '#00ff00';
+  if (status === "IN_TRANSIT_TO" || status === "INCOMING_AT") {
+    return "#00ff00";
   }
-  if (status === 'STOPPED_AT') {
-    return '#ff0000';
+  if (status === "STOPPED_AT") {
+    return "#ff0000";
   }
-  return '#d6d6d6';
+  return "#d6d6d6";
 }
 
 /**
